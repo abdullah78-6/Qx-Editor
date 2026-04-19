@@ -42,15 +42,25 @@ const Login=({url})=>{
         newurl=newurl+"/api/auth/reg"
     }
     try{
-        const response=await axios.post(newurl,logindatastructure);
+        const response=await axios.post(newurl,logindatastructure,{
+            withCredentials:true
+        });
     if(response.data.status){
           if(logintype==="signin"){
-            
-            // localStorage.setItem("token",response.data.token);
-            localStorage.setItem("email",response.data.email);
+             const res=await axios.get(url+"/api/auth/pr",{
+            withCredentials:true,
+        })
+        if(res.data.status){
+            dispatch(control.setbackendemail(res.data.email));
+        }
+        else{
+            dispatch(control.setbackendemail(""));
+        }
+       
+       
           }
         
-        dispatch(control.setbackendemail(response.data.email));
+       
         
         toast.success(response.data.result);
         

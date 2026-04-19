@@ -2,8 +2,9 @@ import usermodel from "../models/usermodel.js";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import validator from "validator"
+// import jwtr from "jwt-redis";
 const createtoken=(id)=>{
-    return jwt.sign({id},process.env.JWT_SECRET);
+    return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:"1d"});
 
 }
 const register=async(req,res)=>{
@@ -28,7 +29,7 @@ const register=async(req,res)=>{
         })
         const user=await newuser.save();
         const token=createtoken(user._id);
-        return res.json({status:true,token,result:"USER REGISTER SUCCESSFULLY"});
+        return res.json({status:true,result:"USER REGISTER SUCCESSFULLY"});
 
 
         
@@ -51,7 +52,14 @@ const login=async(req,res)=>{
             return res.json({status:false,result:"PASSWORD IS INCORRECT"});
         }
         const token=createtoken(user._id);
-        return res.json({status:true,token,email:email,result:"LOGIN SUCCESSFULLY"});
+        res.cookie("token",token,{
+            httpOnly:true,
+            secure:true,
+            sameSite:"strict",
+            maxAge:24*60*60*1000
+        })
+
+        return res.json({status:true,email:email,result:"LOGIN SUCCESSFULLY"});
         
     } catch (error) {
         console.log("ERROR");
@@ -91,6 +99,42 @@ const Reset=async(req,res)=>{
     }
 
 }
-export {register,login,Reset}
+const Logout=async(req,res)=>{
+    try {
+        res.clearCookie("token",{
+        httpOnly:true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite:"strict"
+    });
+    return res.json({status:true,message:"Logged Out "})
+        
+    } catch (error) {
+        console.log("logout ",error);
+        res.json({status:false,message:"Logout error"});
+        
+    }
+    
+    
+    
+
+}
+const getProfile=async(req,res)=>{
+    try {
+        const token=req.cookies.token;
+        if(!token){
+            return res.json({status:false});
+        }
+        const decoded=jwt.verify(token,process.env.JWT_SECRET);
+        const user=await usermodel.findById(decoded.id).select("email");
+        if(!user){
+            return res.json({status:false});
+        }
+        res.json({status:true,email:user.email})
+    } catch (error) {
+        res.json({status:false});
+    }
+
+}
+export {register,login,Reset,Logout,getProfile}
 
 

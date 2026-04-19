@@ -3,9 +3,14 @@ import cors from "cors";
 import "dotenv/config"
 import Connectdb from "./config/db.js";
 import userrouter from "./routes/user-routes.js";
+import cookieParser from "cookie-parser";
 const app=express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true
+}));
+app.use(cookieParser());
 Connectdb();
 const port=process.env.PORT;
 app.get("/",(req,res)=>{

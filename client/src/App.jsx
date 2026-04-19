@@ -1,3 +1,5 @@
+import Footer from "./components/footer/footer";
+import Hero from "./components/hero/hero";
 import Login from "./components/login-popup/login";
 import Navbar from "./components/navbar/navbar";
 import { useDispatch,useSelector } from "react-redux";
@@ -8,6 +10,8 @@ function Inner(){
   return <div>
   <Navbar url={url}/>
   {loginstatus?<Login url={url}/>:<></>}
+  <Hero/>
+  <Footer/>
   </div>
 }
 function App() {
