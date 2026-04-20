@@ -1,16 +1,19 @@
+import { Outlet } from "react-router-dom";
 import Footer from "./components/footer/footer";
-import Hero from "./components/hero/hero";
 import Login from "./components/login-popup/login";
 import Navbar from "./components/navbar/navbar";
 import { useDispatch,useSelector } from "react-redux";
+import Hero from "./components/hero/hero";
 function Inner(){
   const url="http://localhost:8000"
   const dispatch=useDispatch();
   const loginstatus=useSelector(state=>state.main.loginstatus);
   return <div>
-  <Navbar url={url}/>
+ <Navbar url={url}/>
   {loginstatus?<Login url={url}/>:<></>}
-  <Hero/>
+  
+ <Outlet/>
+  
   <Footer/>
   </div>
 }

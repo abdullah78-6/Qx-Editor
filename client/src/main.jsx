@@ -5,11 +5,41 @@ import App from './App.jsx'
 import {Provider} from "react-redux";
 import codestore from './redux/store.js';
 import { ToastContainer } from "react-toastify";
+import {RouterProvider,createBrowserRouter} from "react-router-dom";
+import Hero from './components/hero/hero.jsx';
+import Editor from './components/editor/editor.jsx';
+const url="http://localhost:8000"
+const router=createBrowserRouter([
+  {
+    path:"/",
+    element:<App/>,
+    children:[
+      {
+        index:true,
+        element:(
+          <>
+          
+          <Hero/>
+          </>
+        )
+      },
+      {
+        path:"editor",
+        element:<Editor url={url}/>
+      }
+    ]
+  }
+])
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    
     <Provider store={codestore}>
-    <App />
+    <RouterProvider router={router}>
+    
+    </RouterProvider>
     <ToastContainer  autoClose={3000} pauseOnHover style={{zIndex:9999}}/>
     </Provider >
-  </StrictMode>,
+    
+  </StrictMode>
 )
