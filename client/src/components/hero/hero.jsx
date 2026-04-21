@@ -23,13 +23,13 @@ const Hero = () => {
 
      
         <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
-          Build, Run & Debug Code <br />
+           Run & Debug Code <br />
           <span className="text-blue-600">in Your Browser</span>
         </h1>
 
      
         <p className="mt-6 text-lg md:text-xl text-gray-700">
-          A powerful MERN stack code editor with real-time execution,
+          A powerful MERN stack code editor with 
           multi-language support, and a seamless developer experience.
         </p>
 
