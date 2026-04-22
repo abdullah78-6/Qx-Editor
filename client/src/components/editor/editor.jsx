@@ -9,13 +9,20 @@ const Editor=({url})=>{
     const language=useSelector(state=>state.main.language);
     const backendemail=useSelector(state=>state.main.backendemail);
     const[codedetatils,setcodedetails]=useState();
+    const[codedetatils2,setcodedetails2]=useState();
     const[results,setresult]=useState();
     const[err,seterr]=useState();
+    const[results2,setresult2]=useState();
+    const[err2,seterr2]=useState();
 useEffect(()=>{
     let jscode=localStorage.getItem("jscode");
+    let allcode=localStorage.getItem("all");
     let lang=localStorage.getItem("lang");
     if(jscode){
         setcodedetails(jscode);
+    }
+    if(allcode){
+        setcodedetails2(allcode);
     }
     if(lang){
         dispatch(control.setlanguage(lang));
@@ -45,12 +52,17 @@ useEffect(()=>{
 
     }
     const Reset=()=>{
-        if(!codedetatils){
+        if(!codedetatils||!codedetatils2){
             toast.error("Editor is already empty");
             return ;
         }
+
+
         setcodedetails("");
+        setcodedetails2("");
         localStorage.setItem("jscode","");
+        localStorage.setItem("lang","");
+        localStorage.setItem("all","");
         
     }
     const Runcode=async()=>{
@@ -62,10 +74,10 @@ useEffect(()=>{
             toast.error("Please Choose Language");
             return ;
         }
-        if(!codedetatils){
-            toast.error("PLEASE WRITE SOME CODE");
-            return ;
-        }
+        // if(!codedetatils){
+        //     toast.error("PLEASE WRITE SOME CODE");
+        //     return ;
+        // }
         if(language.toLowerCase()==="javascript"){
             try {
                 let output="";
@@ -94,6 +106,27 @@ useEffect(()=>{
         }
         else{
             // other language c,c++,python,java
+            localStorage.setItem("allcode",codedetatils2);
+            try{
+            const response=await axios.post(url+"/api/ide/run",{
+                language,
+                code:codedetatils2
+            });
+            if(response.data.status){
+                setresult2(response.data.output);
+                seterr2("");
+                
+            }
+            
+            else{
+                seterr2(response.data.message);
+                setresult2("");
+            }
+        }catch(err){
+            console.log(err);
+            seterr2("server error");
+            setresult2("");
+        }
 
         }
     }
@@ -129,8 +162,10 @@ useEffect(()=>{
         />
 
         </div>
-        :<div >
-        </div>}
+        :< >
+        
+        </>
+        }
         
             
             {language==="javascript"?<textarea
@@ -140,7 +175,26 @@ useEffect(()=>{
                 value={results?results:err}
              />
 
-            :<></>}
+            :
+            <div className="flex justify-center items-center gap-30">
+                <div>
+                    <textarea
+        placeholder={`WRITE ${language} CODE`}
+        className="w-full h-[300px] border-2 rounded-2xl p-3"
+        value={codedetatils2||""}
+        onChange={(e)=>setcodedetails2(e.target.value)}
+        />
+                </div>
+                <div>
+                <textarea
+                placeholder="CODE OUTPUT"
+            className="w-full md:w-[45%] h-[40vh] md:h-[60vh] border-2 border-black rounded-xl p-3 bg-black text-white text-xl overflow-y-scroll"
+                readOnly
+                value={results2?results2:err2}
+                />
+                </div>
+            </div>
+            }
         
         </div>
         
