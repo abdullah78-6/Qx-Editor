@@ -5,7 +5,7 @@ const codeslice=createSlice({
      name:"",
      email:"",
      password:""   
-    },token:"",backendemail:"",language:""
+    },token:"",backendemail:"",language:"javascript"
 },
     reducers:{
         setnavclass(state,action){

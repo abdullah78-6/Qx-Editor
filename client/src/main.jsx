@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import {RouterProvider,createBrowserRouter} from "react-router-dom";
 import Hero from './components/hero/hero.jsx';
 import Editor from './components/editor/editor.jsx';
+import Step from './components/steps/steps.jsx';
 const url="http://localhost:8000"
 const router=createBrowserRouter([
   {
@@ -20,12 +21,17 @@ const router=createBrowserRouter([
           <>
           
           <Hero/>
+          <Step/>
           </>
         )
       },
       {
         path:"editor",
         element:<Editor url={url}/>
+      },
+      {
+        path:"/",
+        element:<App/>
       }
     ]
   }

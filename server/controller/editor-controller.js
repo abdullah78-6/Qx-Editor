@@ -14,7 +14,8 @@ const Editor=(req,res)=>{
 
 }
 const Runcode=async(req,res)=>{
-    const {language,code}=req.body;
+    const {language,code,userinput}=req.body;
+    console.log("user input from frontend is ",userinput);
     const languageMap={
         python:71,
         java:62,
