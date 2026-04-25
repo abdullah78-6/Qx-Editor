@@ -15,7 +15,6 @@ const Editor=(req,res)=>{
 }
 const Runcode=async(req,res)=>{
     const {language,code,userinput}=req.body;
-    console.log("user input from frontend is ",userinput);
     const languageMap={
         python:71,
         java:62,
@@ -32,25 +31,21 @@ const Runcode=async(req,res)=>{
 
     try {
         const response=await axios.post(
-            "https://ce.judge0.com/submissions?base64_encoded=false&wait=true",
+            process.env.JUDGE_URL,
             {
                 source_code:code,
-                language_id:languageMap[language]
+                language_id:languageMap[language],
+                stdin:userinput||""
             },
-            // {
-            //     Headers:{
-            //         "Content-Type":"application/json",
-            //         "X-RapidAPI-Key":"",
-            //         "X-Rapid-API":"judge0-ce.p.rapidapi.com"
-            //     }
-            // }
+            
         );
+       
         res.json({status:true,output:response.data.stdout||response.data.stderr||response.data.compile_output});
+       
     } catch (error) {
         console.log("run code error",error);
-        res.json({status:false,message:"Execution failed"})
-        
-    }
+        res.json({status:false,message:"FIX YOUR CODE"});
+    } 
 
 }
 export{Editor,Runcode}

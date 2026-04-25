@@ -5,7 +5,7 @@ const codeslice=createSlice({
      name:"",
      email:"",
      password:""   
-    },token:"",backendemail:"",language:"javascript"
+    },token:"",backendemail:"",language:"javascript",loading:false
 },
     reducers:{
         setnavclass(state,action){
@@ -34,6 +34,9 @@ const codeslice=createSlice({
         },
         setlanguage(state,action){
             state.language=action.payload;
+        },
+        setloading(state,action){
+            state.loading=action.payload;
         }
 
     }

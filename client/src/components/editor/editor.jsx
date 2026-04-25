@@ -4,9 +4,11 @@ import axios, { all } from "axios";
 import {toast} from "react-toastify"
 import Editors from "@monaco-editor/react";
 import { useEffect, useState } from "react";
+import { ThreeDots } from 'react-loader-spinner'
 const Editor=({url})=>{
     const dispatch=useDispatch();
     const language=useSelector(state=>state.main.language);
+    const loading=useSelector(state=>state.main.loading);
     const backendemail=useSelector(state=>state.main.backendemail);
     const[codedetatils,setcodedetails]=useState("");
     const[codedetatils2,setcodedetails2]=useState("");
@@ -15,6 +17,7 @@ const Editor=({url})=>{
     const[results2,setresult2]=useState();
     const[err2,seterr2]=useState();
     const [userinput,setuserinput]=useState("");
+    const [airesult,setairesult]=useState("");
 useEffect(()=>{
     let jscode=localStorage.getItem("jscode");
     // let allcode=localStorage.getItem("allcode");
@@ -101,6 +104,7 @@ useEffect(()=>{
         if(language!=="javascript"){
     
         setcodedetails2("");
+        setuserinput("");
         
         localStorage.setItem("lang","");
         localStorage.setItem(`allcode_${language}`,"");
@@ -216,6 +220,52 @@ useEffect(()=>{
       return "";
         }
     }
+    const Analyze=async()=>{
+        if((language==="javascript"&&!codedetatils)||(language!="javascript"&&!codedetatils2)){
+            toast.error("Editor is  empty");
+            return ;
+        }
+        if(!backendemail){
+            toast.error("User Login Required");
+            return ;
+        }
+        if(language==="javascript"){
+            dispatch(control.setloading(true));
+        const response=await axios.post(url+"/api/chk/ai",{
+            codedetails:codedetatils
+
+        })
+        if(response.data.status){
+            setairesult(response.data.result);
+            dispatch(control.setloading(false));
+        }
+        else{
+            setairesult(response.data.result);
+            dispatch(control.setloading(false));
+
+        }
+        return ;
+    }
+
+       if(language!=="javascript"){
+        dispatch(control.setloading(true));
+        const response=await axios.post(url+"/api/chk/ai",{
+            codedetails:codedetatils2
+
+        })
+        if(response.data.status){
+            setairesult(response.data.result);
+            dispatch(control.setloading(false));
+        }
+        else{
+            setairesult(response.data.result);
+            dispatch(control.setloading(false));
+
+        }
+        
+    }
+        
+    }
     
     return <div className="">
         <h1 className="capitalize text-sm md:text-xl lg:text-xl xl:text-xl  text-center mt-2 font-semibold text-pink-600">note: reset after executing your code </h1>
@@ -246,6 +296,7 @@ useEffect(()=>{
         width="100% "
         height="100%"
         language={getmonacolanguage(language)}
+        theme="vs-dark"
         value={
             language==="javascript"
             ?codedetatils||getDefaultvalue(language):codedetatils2||getDefaultvalue(language)
@@ -255,13 +306,19 @@ useEffect(()=>{
         />
 
         </div>
+        <textarea
+        placeholder="PLEASE GIVE USER INPUT BEFORE EXECUTION IN NEW LINE"
+        value={userinput}
+        onChange={(e)=>language!=="javascript"?setuserinput(e.target.value):""} 
+       className="w-360  md:mr-0 md:ml-0 mr-5 ml-5 md:w-[45%] h-[40vh] md:h-[60vh] border-2 border-black rounded-xl p-3 bg-black text-white text-xl overflow-y-scroll"
+        />
         
+        <h1 className="text-3xl text-pink-700 font-semibold">CODE OUTPUT </h1>
         
-            
-            <textarea
+        <textarea
             placeholder="CODE OUTPUT"
             className="w-360  md:mr-0 md:ml-0 mr-5 ml-5 md:w-[45%] h-[40vh] md:h-[60vh] border-2 border-black rounded-xl p-3 bg-black text-white text-xl overflow-y-scroll"
-            onChange={(e)=>language!=="javascript"?setuserinput(e.target.value):""}
+                readOnly         
                 value={
                     language==="javascript"
                     ?results||err
@@ -273,6 +330,22 @@ useEffect(()=>{
             
             
         
+        </div>
+        <div className="flex justify-center items-center mt-5 flex-wrap">
+            <div>
+                <button onClick={Analyze} className="bg-blue-700 mt-3 text-xl text-indigo-200 font-semibold capitalize rounded-3xl p-2 hover:bg-blue-900 hover:text-white transition ease-in-out duration-200">analyze code  with ai </button>
+            </div>
+            {loading?<h1><ThreeDots height="80"
+  width="80"
+  radius="9"
+  color="#CA5995"
+  ariaLabel="three-dots-loading"
+  wrapperStyle={{ margin: '20px' }}
+  wrapperClass="custom-loader"
+  visible={true}/></h1>:<></>}
+            <div className="w-full md:w-[80%] bg-gray-900 text-white mt-4 p-4 rounded-xl shadow-lg border border-gray-700">
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-200">{airesult||"NO ANALYSIS"}</p>
+            </div>
         </div>
         
     </div>
