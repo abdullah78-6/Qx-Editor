@@ -8,6 +8,7 @@ import Step from "./components/steps/steps";
 function Inner(){
   const url="http://localhost:8000"
   const dispatch=useDispatch();
+  const theme=useSelector(state=>state.main.theme);
   const loginstatus=useSelector(state=>state.main.loginstatus);
   return <div>
 

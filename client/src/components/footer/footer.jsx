@@ -10,7 +10,7 @@ const Footer=()=>{
                 <div>
                <h1 className="text-3xl text-blue-600 ">Editor</h1> 
                <p className="text-center">syntax highlighting</p>
-               <p className="text-center">auto completion</p>
+               <p className="text-center">ai-support</p>
                <p className="text-center">multi-language support</p>
                </div>
 

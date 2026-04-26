@@ -5,6 +5,8 @@ import {toast} from "react-toastify"
 import Editors from "@monaco-editor/react";
 import { useEffect, useState } from "react";
 import { ThreeDots } from 'react-loader-spinner'
+import { FaMoon } from "react-icons/fa";
+import { FaSun } from "react-icons/fa";
 const Editor=({url})=>{
     const dispatch=useDispatch();
     const language=useSelector(state=>state.main.language);
@@ -18,6 +20,7 @@ const Editor=({url})=>{
     const[err2,seterr2]=useState();
     const [userinput,setuserinput]=useState("");
     const [airesult,setairesult]=useState("");
+    const theme=useSelector(state=>state.main.theme);
 useEffect(()=>{
     let jscode=localStorage.getItem("jscode");
     // let allcode=localStorage.getItem("allcode");
@@ -267,7 +270,7 @@ useEffect(()=>{
         
     }
     
-    return <div className="">
+    return <div >
         <h1 className="capitalize text-sm md:text-xl lg:text-xl xl:text-xl  text-center mt-2 font-semibold text-pink-600">note: reset after executing your code </h1>
        
         <div className="flex justify-center items-center gap-3">
@@ -290,13 +293,19 @@ useEffect(()=>{
         <div>
              <button onClick={Reset} className="bg-green-600 px-7 text-gray-800 text-xl font-semibold hover:bg-green-900 transition ease-in-out duration-150 hover:text-white  rounded-3xl   p-1 mb-8">Reset</button>
         </div>
+        <div className="flex justify-center items-center  ">
+      {theme?<button className="text-2xl text-yellow-600 bg-blue-600 p-2 rounded-2xl mb-5 " onClick={()=>dispatch(control.settheme(false))}><FaSun/></button>:<button className="text-2xl text-blue-600 bg-yellow-600 p-2 rounded-2xl " onClick={()=>dispatch(control.settheme(true))}><FaMoon/></button>}
+        </div>
         <div className="flex justify-center items-center gap-30 flex-wrap">
-        <div className="w-full md:w-[45%] h-[40vh] md:h-[60vh] border rounded-xl">
+            
+        <div className="w-full md:w-[45%] h-[40vh] md:h-[60vh] border rounded-xl ml-2">
+            
         <Editors
+        
         width="100% "
         height="100%"
         language={getmonacolanguage(language)}
-        theme="vs-dark"
+        theme={`${!theme?"light":"vs-dark"}`}
         value={
             language==="javascript"
             ?codedetatils||getDefaultvalue(language):codedetatils2||getDefaultvalue(language)
@@ -307,14 +316,20 @@ useEffect(()=>{
 
         </div>
         <textarea
-        placeholder="PLEASE GIVE USER INPUT BEFORE EXECUTION IN NEW LINE"
+        placeholder="PLEASE GIVE USER INPUT IN NEW LINE BEFORE EXECUTION "
         value={userinput}
         onChange={(e)=>language!=="javascript"?setuserinput(e.target.value):""} 
-       className="w-360  md:mr-0 md:ml-0 mr-5 ml-5 md:w-[45%] h-[40vh] md:h-[60vh] border-2 border-black rounded-xl p-3 bg-black text-white text-xl overflow-y-scroll"
+       className={`${language==="javascript"?"hidden":"w-360  md:mr-0 md:ml-0 mr-5 ml-5 md:w-[45%] h-[40vh] md:h-[60vh] border-2 border-black rounded-xl p-3 bg-black text-white text-xl overflow-y-scroll"} `}
         />
         
-        <h1 className="text-3xl text-pink-700 font-semibold">CODE OUTPUT </h1>
+    
+            
+            
         
+        </div>
+          <h1 className="text-3xl text-center  mt-10 text-pink-700 font-semibold">CODE OUTPUT </h1>
+        <div className="flex justify-center items-center mt-10">
+          <div className="w-full flex justify-center items-center" >
         <textarea
             placeholder="CODE OUTPUT"
             className="w-360  md:mr-0 md:ml-0 mr-5 ml-5 md:w-[45%] h-[40vh] md:h-[60vh] border-2 border-black rounded-xl p-3 bg-black text-white text-xl overflow-y-scroll"
@@ -326,14 +341,12 @@ useEffect(()=>{
                     
                 }
              />
+             </div>
+             </div>
 
-            
-            
-        
-        </div>
         <div className="flex justify-center items-center mt-5 flex-wrap">
             <div>
-                <button onClick={Analyze} className="bg-blue-700 mt-3 text-xl text-indigo-200 font-semibold capitalize rounded-3xl p-2 hover:bg-blue-900 hover:text-white transition ease-in-out duration-200">analyze code  with ai </button>
+                <button onClick={Analyze} className="bg-blue-700 mt-3 mr-3 text-xl text-indigo-200 font-semibold capitalize rounded-3xl p-2 hover:bg-blue-900 hover:text-white transition ease-in-out duration-200">analyze code  with ai </button>
             </div>
             {loading?<h1><ThreeDots height="80"
   width="80"
@@ -343,8 +356,8 @@ useEffect(()=>{
   wrapperStyle={{ margin: '20px' }}
   wrapperClass="custom-loader"
   visible={true}/></h1>:<></>}
-            <div className="w-full md:w-[80%] bg-gray-900 text-white mt-4 p-4 rounded-xl shadow-lg border border-gray-700">
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-200">{airesult||"NO ANALYSIS"}</p>
+            <div className="w-full md:w-[80%] bg-gray-900 text-white mt-4 p-4 rounded-xl shadow-lg border border-gray-700 ">
+                <p className={`whitespace-pre-wrap text-sm  leading-relaxed text-gray-200 ${airesult?"":"text-center"}`}>{airesult||"NO ANALYSIS"}</p>
             </div>
         </div>
         
