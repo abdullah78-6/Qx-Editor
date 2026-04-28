@@ -60,7 +60,8 @@ const languageMap = {
   python: 71,
   java: 62,
   c: 50,
-  "c++": 54
+  "c++": 54,
+    cpp: 54
 };
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
