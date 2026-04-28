@@ -6,7 +6,7 @@ import { useDispatch,useSelector } from "react-redux";
 import Hero from "./components/hero/hero";
 import Step from "./components/steps/steps";
 function Inner(){
-  const url="https://qx-editor-backend.onrender.com"
+  const url="https://qx-editor-server.onrender.com"
   const dispatch=useDispatch();
   const theme=useSelector(state=>state.main.theme);
   const loginstatus=useSelector(state=>state.main.loginstatus);
