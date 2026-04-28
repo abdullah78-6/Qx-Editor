@@ -26,57 +26,106 @@ const Login=({url})=>{
      const changeinginp=(type)=>{
             dispatch(control.setinput(type));
     }
-    const onlogin=async(event)=>{
-    event.preventDefault();
-    let newurl=url;
-    if(logintype==="signin"){
-        // set login api url
-        newurl=newurl+"/api/auth/log"
-        // dispatch(control.setprofileicon(true));
+//     const onlogin=async(event)=>{
+//     event.preventDefault();
+//     let newurl=url;
+//     if(logintype==="signin"){
+//         // set login api url
+//         newurl=newurl+"/api/auth/log"
+//         // dispatch(control.setprofileicon(true));
         
       
 
-    }
-    else{
-        // set signup api url
-        newurl=newurl+"/api/auth/reg"
-    }
-    try{
-        const response=await axios.post(newurl,logindatastructure,{
-            withCredentials:true
-        });
-    if(response.data.status){
-          if(logintype==="signin"){
-             const res=await axios.get(url+"/api/auth/pr",{
-            withCredentials:true,
-        })
-        if(res.data.status){
-            dispatch(control.setbackendemail(res.data.email));
-        }
-        else{
-            dispatch(control.setbackendemail(""));
-        }
+//     }
+//     else{
+//         // set signup api url
+//         newurl=newurl+"/api/auth/reg"
+//     }
+//     try{
+//         const response=await axios.post(newurl,logindatastructure,{
+//             withCredentials:true
+//         });
+//     if(response.data.status){
+//           if(logintype==="signin"){
+//              const res=await axios.get(url+"/api/auth/pr",{
+//             withCredentials:true,
+//         })
+//         if(res.data.status){
+//             dispatch(control.setbackendemail(res.data.email));
+//         }
+//         else{
+//             dispatch(control.setbackendemail(""));
+//         }
        
        
-          }
+//           }
         
        
         
-        toast.success(response.data.result);
+//         toast.success(response.data.result);
         
-    }
-    else{
-        toast.error(response.data.result);
-    }
+//     }
+//     else{
+//         toast.error(response.data.result);
+//     }
 
-    }
-    catch(err){
-        toast.error("SERVER ERROR");
+//     }
+//     catch(err){
+//         toast.error("SERVER ERROR");
 
-    }
+//     }
     
 
-}
+// }
+    const onlogin = async (event) => {
+    event.preventDefault();
+    let newurl = url;
+
+    if (logintype === "signin") {
+        newurl = newurl + "/api/auth/log";
+    } else {
+        newurl = newurl + "/api/auth/reg";
+    }
+
+    try {
+        const response = await axios.post(newurl, logindatastructure, {
+            withCredentials: true
+        });
+
+        if (response.data.status) {
+
+            if (logintype === "signin") {
+
+                // ⏳ wait for cookie to be properly set
+                setTimeout(async () => {
+                    try {
+                        const res = await axios.get(url + "/api/auth/pr", {
+                            withCredentials: true,
+                        });
+
+                        if (res.data.status) {
+                            dispatch(control.setbackendemail(res.data.email));
+                        } else {
+                            dispatch(control.setbackendemail(""));
+                        }
+
+                    } catch (error) {
+                        dispatch(control.setbackendemail(""));
+                    }
+                }, 600); // 🔥 delay fixes your issue
+
+            }
+
+            toast.success(response.data.result);
+
+        } else {
+            toast.error(response.data.result);
+        }
+
+    } catch (err) {
+        toast.error("SERVER ERROR");
+    }
+};
 const Resetpassword=async()=>{
 try {
    
