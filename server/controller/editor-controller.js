@@ -160,5 +160,5 @@ const Runcode = async (req, res) => {
   }
 };
 
-export { Runcode };
+
 export{Editor,Runcode}
