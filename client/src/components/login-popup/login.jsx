@@ -136,7 +136,7 @@ try {
         toast.error("ENTER  PASSWORD AND EMAIL");
         return ;
     }
-        const response=await axios.post("https://qx-editor-backend.onrender.com/api/auth/new",{newpassword,email:logindatastructure.email});
+        const response=await axios.post("https://qx-editor-server.onrender.com/api/auth/new",{newpassword,email:logindatastructure.email});
         if(response.data.status){
             toast.success(response.data.message);
         }
