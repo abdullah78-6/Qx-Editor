@@ -117,7 +117,7 @@ const Runcode = async (req, res) => {
 
     // 🔁 Step 2: Poll for result
     let result;
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
       const resData = await axios.get(
         `https://ce.judge0.com/submissions/${token}?base64_encoded=false`,
         { timeout: 10000 }
