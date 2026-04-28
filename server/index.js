@@ -9,7 +9,7 @@ import airouter from "./routes/ai-routes.js";
 const app=express();
 app.use(express.json());
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:"https://qx-editor-frontend-n727.onrender.com",
     credentials:true
 }));
 app.use(cookieParser());
