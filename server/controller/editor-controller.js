@@ -37,6 +37,11 @@ const Runcode=async(req,res)=>{
                 language_id:languageMap[language],
                 stdin:userinput||""
             },
+            {
+    headers: {
+      "Content-Type": "application/json"
+    }
+            }
             
         );
        
