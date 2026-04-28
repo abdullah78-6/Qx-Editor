@@ -4,7 +4,7 @@ const Analyze=async(req,res)=>{
     try{
     const {codedetails}=req.body;
     console.log("code from frontend is ",codedetails);
-    const key=process.env.GEMNI_APIKEY;
+    const key=process.env.GEMNI;
     const genai=new GoogleGenerativeAI(key);
     const model=genai.getGenerativeModel({model:"gemini-2.5-flash"})
     const prompt=`
