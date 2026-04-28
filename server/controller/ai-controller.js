@@ -1,3 +1,4 @@
+// PROJECT  IS COMPLETE BUT PARTIALLY DEPLOY 
 import axios from "axios"
 import {GoogleGenerativeAI} from "@google/generative-ai"
 const Analyze=async(req,res)=>{
