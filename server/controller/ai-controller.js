@@ -6,7 +6,7 @@ const Analyze=async(req,res)=>{
     console.log("code from frontend is ",codedetails);
     const key=process.env.GEMNI;
     const genai=new GoogleGenerativeAI(key);
-    const model=genai.getGenerativeModel({model:"gemini-2.5-flash"})
+    const model=genai.getGenerativeModel({model:"gemini-1.5-flash"})
     const prompt=`
     You are an expert code analyzer.
 
