@@ -9,7 +9,7 @@ import {RouterProvider,createBrowserRouter} from "react-router-dom";
 import Hero from './components/hero/hero.jsx';
 import Editor from './components/editor/editor.jsx';
 import Step from './components/steps/steps.jsx';
-const url="http://localhost:8000"
+const url="https://qx-editor-server.onrender.com"
 const router=createBrowserRouter([
   {
     path:"/",
